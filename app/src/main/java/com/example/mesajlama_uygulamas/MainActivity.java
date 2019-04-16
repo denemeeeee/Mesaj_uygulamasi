@@ -32,7 +32,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-    ListView ls;static InputStream is = null;
+    ListView ls;static InputStream is = null;public JSONparcalama jsp = new JSONparcalama();
     List<String> veriler = new ArrayList<String>();
     JSONArray ja=null;JSONObject js=null;
     EditText ed;
@@ -64,59 +64,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
     class listeleme extends AsyncTask<String,String,String>{
         protected String doInBackground(String ... params) {
-        HttpURLConnection connection = null;
-        String dosya = "";
-        BufferedReader br = null;
-        try {
-            URL url = new URL(params[0]);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-            is = connection.getInputStream();
-            br = new BufferedReader(new InputStreamReader(is));
-            String satir;
-            while ((satir = br.readLine()) != null) {
-                Log.d("satır", satir);
-                dosya += satir;
+            List<NameValuePair> sendParams = new ArrayList<NameValuePair>();
+            JSONObject myObject = jsp.makeHttpRequest(params[0], "POST", sendParams);
+            try{
+                veriler.clear();
+                JSONArray tempArray = myObject.getJSONArray("donenVeriler");
+                for (int i = 0; i < tempArray.length(); i++) {
+                    veriler.add(tempArray.getJSONObject(i).getString("tag"));
+                }
+                return"";
+
+            }catch (Exception e)
+            {
+                e.printStackTrace();return "";
             }
-            return dosya;
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return dosya;
-        }
         }
         protected void onPostExecute(String s){
             Log.d("postextengelenmesaj",s);
             try{
-                veriler.clear();
-                js = new JSONObject(s);
-                ja = js.getJSONArray("donenVeriler");
-
-                for(int i=0;i<ja.length();i++){
-                    veriler.add(ja.getJSONObject(i).getString("tag"));
-                }
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this,android.R.layout.simple_list_item_1,veriler);
                 ls.setAdapter(adapter);
             }catch (Exception e){e.printStackTrace();}
         }
     }
-
-
     class ekle extends AsyncTask<String,String,String>{
         protected String doInBackground(String ... params){
             List<NameValuePair> paramss = new ArrayList<>();
             paramss.add(new BasicNameValuePair("eklenecekVeri", params[1]));
-            try {
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost(params[0]);
-                httpPost.setEntity(new UrlEncodedFormEntity(paramss));
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                HttpEntity httpEntity = httpResponse.getEntity();
-                is = httpEntity.getContent();
-            }catch (Exception e){e.printStackTrace();}
+            JSONObject myObject = jsp.makeHttpRequest(params[0], "POST", paramss);
             return"";
         }
     }
