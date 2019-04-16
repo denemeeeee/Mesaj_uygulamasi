@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String degisken = ed.getText().toString();
                 new ekle().execute("http://sadakatsizcpre.tr.ht/ekle.php",degisken);
+                Toast.makeText(MainActivity.this, ed.getText()+" eklendi.", Toast.LENGTH_SHORT).show();
                 ed.setText("");
+
 
 
             }
