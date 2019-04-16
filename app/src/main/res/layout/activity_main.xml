@@ -15,28 +15,38 @@
         android:inputType="textPersonName" >
         <requestFocus />
     </EditText>
+<LinearLayout
+    android:id="@+id/linearBtn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/isim"
+    android:orientation="horizontal">
 
     <Button
         android:id="@+id/ekle"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_weight="0.5"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/isim"
+        android:background="@drawable/custom_buton"
         android:layout_below="@+id/isim"
         android:text="Mesaj Gönder" />
     <Button
         android:id="@+id/yenile"
-        android:layout_width="fill_parent"
+        android:layout_weight="0.5"
+        android:layout_width="wrap_content"
+        android:background="@drawable/custom_buton"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/ekle"
         android:layout_below="@+id/ekle"
         android:text="Mesajları Yenile" />
+</LinearLayout>
 
     <ListView
         android:id="@+id/listem"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/yenile"
-        android:layout_below="@+id/yenile" >
+        android:layout_below="@+id/linearBtn" >
     </ListView>
 
 
