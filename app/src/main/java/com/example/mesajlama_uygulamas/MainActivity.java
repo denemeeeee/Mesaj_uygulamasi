@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.mesajlama_uygulamas.webservis;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -33,7 +33,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ListView ls;static InputStream is = null;public JSONparcalama jsp = new JSONparcalama();
-    List<String> veriler = new ArrayList<String>();
+    List<String> veriler = new ArrayList<String>(); public listeleme ws = new listeleme();
     JSONArray ja=null;JSONObject js=null;
     EditText ed;
     @Override
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 new listeleme().execute("http://sadakatsizcpre.tr.ht/getir.php");
             }
         });
@@ -58,47 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 new ekle().execute("http://sadakatsizcpre.tr.ht/ekle.php",degisken);
                 Toast.makeText(MainActivity.this, ed.getText()+" eklendi.", Toast.LENGTH_SHORT).show();
                 ed.setText("");
-
-
-
             }
         });
     }
-
-
-    class listeleme extends AsyncTask<String,String,String>{
-        protected String doInBackground(String ... params) {
-            List<NameValuePair> sendParams = new ArrayList<NameValuePair>();
-            JSONObject myObject = jsp.makeHttpRequest(params[0], "POST", sendParams);
-            try{
-                veriler.clear();
-                JSONArray tempArray = myObject.getJSONArray("donenVeriler");
-                for (int i = 0; i < tempArray.length(); i++) {
-                    veriler.add(tempArray.getJSONObject(i).getString("tag"));
-                }
-                return"";
-
-            }catch (Exception e)
-            {
-                e.printStackTrace();return "";
-            }
-        }
-        protected void onPostExecute(String s){
-            Log.d("postextengelenmesaj",s);
-            try{
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this,android.R.layout.simple_list_item_1,veriler);
-                ls.setAdapter(adapter);
-            }catch (Exception e){e.printStackTrace();}
-        }
-    }
-    class ekle extends AsyncTask<String,String,String>{
-        protected String doInBackground(String ... params){
-            List<NameValuePair> paramss = new ArrayList<>();
-            paramss.add(new BasicNameValuePair("eklenecekVeri", params[1]));
-            JSONObject myObject = jsp.makeHttpRequest(params[0], "POST", paramss);
-            return"";
-        }
-    }
-
-
 }
