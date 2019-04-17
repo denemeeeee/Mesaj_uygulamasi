@@ -52,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new listeleme().execute("http://sadakatsizcpre.tr.ht/getir.php");
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, com.example.mesajlama_uygulamas.listeleme.veriler);
-                ls.setAdapter(adapter);
+
 
             }
         });
@@ -70,6 +69,35 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    class listeleme extends AsyncTask<String, String, List<String>> {
+
+        InputStream is = null;
+        public JSONparcalama jsp = new JSONparcalama();
+        List<String> veriler = new ArrayList<String>();
+        JSONArray ja = null;
+        JSONObject js = null;
+
+
+        protected List<String> doInBackground(String... params) {
+            List<NameValuePair> sendParams = new ArrayList<NameValuePair>();
+            JSONObject myObject = jsp.makeHttpRequest(params[0], "POST", sendParams);
+            try {
+                veriler.clear();
+                JSONArray tempArray = myObject.getJSONArray("donenVeriler");
+                for (int i = 0; i < tempArray.length(); i++) {
+                    veriler.add(tempArray.getJSONObject(i).getString("tag"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return veriler;
+        }
+
+        protected void onPostExecute(List<String> s) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, veriler);
+            ls.setAdapter(adapter);
+        }
+    }
 
 
 }
