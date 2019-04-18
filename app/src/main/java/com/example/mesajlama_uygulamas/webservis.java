@@ -19,14 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ekle extends AsyncTask<String, String, String> {
-    ListView ls;
-    static InputStream is = null;
     public JSONparcalama jsp = new JSONparcalama();
-    List<String> veriler = new ArrayList<String>();
-    JSONArray ja = null;
-    JSONObject js = null;
-    EditText ed;
-
     protected String doInBackground(String... params) {
         List<NameValuePair> paramss = new ArrayList<>();
         paramss.add(new BasicNameValuePair("eklenecekVeri", params[1]));
