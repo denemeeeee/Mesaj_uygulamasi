@@ -1,6 +1,12 @@
 package com.example.mesajlama_uygulamas;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button b = (Button) findViewById(R.id.yenile);
@@ -34,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 new listeleme().execute("http://sadakatsizcpre.tr.ht/getir.php");
             }
         });
+
         Button b2 = (Button) findViewById(R.id.ekle);
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +52,23 @@ public class MainActivity extends AppCompatActivity {
                 String degisken = ed.getText().toString();
                 new ekle().execute("http://sadakatsizcpre.tr.ht/ekle.php", degisken);
                 Toast.makeText(MainActivity.this, ed.getText() + " eklendi.", Toast.LENGTH_SHORT).show();
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                Notification.Builder ibuilder = new Notification.Builder(MainActivity.this);
+                ibuilder.setContentTitle("Mesaj Geldi")
+                        .setContentText(ed.getText().toString())
+                        .setSmallIcon(R.drawable.bildirimresmi)
+                        .setAutoCancel(true);
+                Intent intent= new Intent(MainActivity.this, notification.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 1, intent, 0);
+                ibuilder.setContentIntent(pendingIntent);
+
+                Notification nnesne = ibuilder.getNotification();
+                manager.notify(1, nnesne);
+
+
+
                 ed.setText("");
+
 
             }
         });
@@ -71,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
             ls.setAdapter(adapter);
         }
     }
+
+
+
+
 
 
 }

@@ -40,6 +40,7 @@
         android:layout_alignLeft="@+id/ekle"
         android:layout_below="@+id/ekle"
         android:text="Mesajları Yenile" />
+
 </LinearLayout>
 
     <ListView

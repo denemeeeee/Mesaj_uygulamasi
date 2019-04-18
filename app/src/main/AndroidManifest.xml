@@ -19,6 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<activity android:name=".notification" />
         <activity android:name=".MainActivity" />
     </application>
 
